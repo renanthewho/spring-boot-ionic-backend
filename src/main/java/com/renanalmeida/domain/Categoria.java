@@ -13,21 +13,21 @@ public class Categoria implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) //Estratégia para gerar ids automaticamente
-	private int id;
+	private Integer id;
 	private String nome;
 	
 	public Categoria() {}
 
-	public Categoria(int id, String nome) {
+	public Categoria(Integer id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
