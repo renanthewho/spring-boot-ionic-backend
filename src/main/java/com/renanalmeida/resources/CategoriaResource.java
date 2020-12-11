@@ -24,9 +24,7 @@ public class CategoriaResource {
 	//Request Mapping
 	
 	public ResponseEntity<?> listar(@PathVariable Integer id) {
-		
 		Categoria obj = service.buscar(id);
-		
 		return ResponseEntity.ok(obj);
 		
 	}

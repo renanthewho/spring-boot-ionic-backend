@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Produto implements Serializable{	
 	private static final long serialVersionUID = 1L;
@@ -21,16 +23,19 @@ public class Produto implements Serializable{
 	private Integer id;
 	private String nome;
 	private double preco;
-	//Criar uma lista de categorias pois um produto possui um ou mais categorias.
+	//JsonBackReference indica que a referência foi feita na classe pau
+	@JsonBackReference
 	//Notação ManyToMany, como o nome ja diz, é devido ao relacionamento de muitos para muitos
+	@ManyToMany
 	//Notação JoinTable serve para criar uma tabela para "ligar" as entidades Categoria e Produtos
 	//Campo name = Nome da Tabela; Campo JoinColumns, o nome do campo correspondente a chave estrangeira da classe
+	//Campo name = Nome da Tabela; Campo JoinColumns, o nome do campo correspondente a chave estrangeira da classe
 	//inverseJoinColumns = Nome do campo correspondente a chave est5angeira da classe referenciada.
-	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 		joinColumns = @JoinColumn(name="produto_id"),
 		inverseJoinColumns = @JoinColumn(name="categoria_id")
 	)
+	//Criar uma lista de categorias pois um produto possui um ou mais categorias.
 	private List<Categoria> categorias = new ArrayList<>();
 
 	public Produto(Integer id, String nome, double preco) {
