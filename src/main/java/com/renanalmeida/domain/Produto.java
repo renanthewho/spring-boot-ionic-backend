@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -28,7 +27,7 @@ public class Produto implements Serializable{
 	private String nome;
 	private double preco;
 	//JsonBackReference indica que a referência foi feita na classe pau
-	@JsonBackReference
+	@JsonIgnore
 	//Notação ManyToMany, como o nome ja diz, é devido ao relacionamento de muitos para muitos
 	@ManyToMany
 	//Notação JoinTable serve para criar uma tabela para "ligar" as entidades Categoria e Produtos

@@ -14,8 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.renanalmeida.domain.enums.TipoCliente;
 
 @Entity
@@ -31,7 +30,6 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipoCliente;
 
-	@JsonManagedReference
 	//Serializa as buscas através do cliente para o Endereço.
 	@OneToMany(mappedBy = "cliente")
 	//Um cliente possui mais de um endereço
@@ -46,7 +44,7 @@ public class Cliente implements Serializable{
 	 */
 	private Set<String> telefones = new HashSet<>();
 	
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
 	
