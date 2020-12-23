@@ -1,6 +1,8 @@
 package com.renanalmeida.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.renanalmeida.domain.Categoria;
+import com.renanalmeida.dto.CategoriaDTO;
 import com.renanalmeida.services.CategoriaService;
 
 @RestController
@@ -27,7 +30,7 @@ public class CategoriaResource {
 	//Anotaçâo PathVariable serve para obter o valor do ID informado através do servico, ou seja, o id informado no 
 	//Request Mapping
 	
-	public ResponseEntity<?> listar(@PathVariable Integer id) {
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok(obj);
 		
@@ -56,5 +59,15 @@ public class CategoriaResource {
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	//DTO = Data Transfer Object obtém somente os campos necessários para o negócio, definido pelo cliente.
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> listCategoria = service.findAll();
+		//Método Stream.map serve para percorrer a lista de categorias
+		List<CategoriaDTO> listDto = listCategoria.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+		
 	}
 }

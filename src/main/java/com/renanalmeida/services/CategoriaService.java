@@ -1,5 +1,6 @@
 package com.renanalmeida.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import com.renanalmeida.domain.Categoria;
 import com.renanalmeida.repositories.CategoriaRepository;
 import com.renanalmeida.services.exceptions.DataIntegrityException;
 import com.renanalmeida.services.exceptions.ObjectNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 @Service
 public class CategoriaService {
@@ -44,7 +44,11 @@ public class CategoriaService {
 			repo.deleteById(id);
 		}catch(DataIntegrityViolationException e){
 			throw new DataIntegrityException(DELETE_CATEGORIAEXCEPTION);
-		}
 		
+		}
+	}
+	
+	public List<Categoria> findAll(){	
+		return repo.findAll();
 	}
 }
