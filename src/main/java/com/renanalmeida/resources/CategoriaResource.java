@@ -4,12 +4,16 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,7 +43,9 @@ public class CategoriaResource {
 	@RequestMapping(method=RequestMethod.POST)
 	//Void significa que, no retorno, terá o corpo do Json vazio
 	//Request body transforma o corpo do Json em uma classe java.
-	public ResponseEntity<Void> insert (@RequestBody Categoria obj){
+	//@Valid serve para fazer a validação Bean Validation. somente das categorias, por isso usamos a Categoria DTO
+	public ResponseEntity<Void> insert (@Valid @RequestBody CategoriaDTO objDto){
+		Categoria obj = service.fromDto(objDto);
 		//O método save retorna um objeto, por isso que o atributo recebe o retorno do serviço
 		obj = service.insert(obj);
 		//Irá montar a URI para a chamada. Isso é feito por padrão para HTTP.
@@ -49,7 +55,8 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id){
+		Categoria obj = service.fromDto(objDto);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();	
@@ -67,6 +74,18 @@ public class CategoriaResource {
 		List<Categoria> listCategoria = service.findAll();
 		//Método Stream.map serve para percorrer a lista de categorias
 		List<CategoriaDTO> listDto = listCategoria.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+		
+	}
+	
+	@RequestMapping(value="/page", method=RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> findPage(
+			@RequestParam(value="page", defaultValue = "0")int page, 
+			@RequestParam(value = "linesPerPage", defaultValue = "24" )int linesPerPage, 
+			@RequestParam(value = "ordeyBy", defaultValue = "nome")String orderBy, 
+			@RequestParam(value = "direction", defaultValue = "ASC")String direction) {
+		Page<Categoria> listCategoria = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<CategoriaDTO> listDto = listCategoria.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listDto);
 		
 	}
