@@ -60,11 +60,10 @@ public class CategoriaService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage,Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
-<<<<<<< HEAD
+
 	
 	public Categoria fromDto(CategoriaDTO categoriaDTO) {
 		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 	}
-=======
->>>>>>> 9248958522fc4765eacefe2cc126175e7637dd53
+
 }
