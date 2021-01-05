@@ -6,7 +6,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.renanalmeida.domain.Cliente;
-
+import com.renanalmeida.services.validation.ClienteUpdate;
+//Usado para o update de Clientes.
+@ClienteUpdate
 public class ClienteDTO {
 	
 	private Integer id;

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.renanalmeida.services.validation.ClienteValidation;
+//Usado para a inserção de Clientes.
 //Anotação criada para validar CPF e CNPJ
 @ClienteValidation
 public class ClienteNewDTO implements Serializable{

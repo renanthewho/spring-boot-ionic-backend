@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.renanalmeida.domain.Cliente;
+import com.renanalmeida.dto.ClienteDTO;
 import com.renanalmeida.dto.ClienteNewDTO;
 import com.renanalmeida.services.ClienteService;
 
@@ -49,6 +50,14 @@ public class ClienteResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
+		Cliente obj = service.fromDto(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();	
 	}
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.DELETE)

@@ -8,16 +8,13 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.renanalmeida.domain.enums.TipoCliente;
@@ -63,7 +60,7 @@ public class Cliente implements Serializable{
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		//Só irá armazenar o código do cliente do Enum.
-		this.tipoCliente = tipoCliente.getCod();
+		this.tipoCliente =(tipoCliente == null)? null : tipoCliente.getCod();
 	}
 
 	public Integer getId() {

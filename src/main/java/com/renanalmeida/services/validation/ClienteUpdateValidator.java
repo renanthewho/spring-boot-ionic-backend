@@ -2,47 +2,47 @@ package com.renanalmeida.services.validation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.renanalmeida.domain.Cliente;
-import com.renanalmeida.domain.enums.TipoCliente;
-import com.renanalmeida.dto.ClienteNewDTO;
+import com.renanalmeida.dto.ClienteDTO;
 import com.renanalmeida.repositories.ClienteRepository;
 import com.renanalmeida.resources.exceptions.FieldMessage;
-import com.renanalmeida.services.validation.utils.BR;
 
 //Criando a validação para a anotação.
-public class ClienteValidationValidator implements ConstraintValidator<ClienteValidation, ClienteNewDTO> {
+public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
 
 	@Override
-	public void initialize(ClienteValidation ann) {
+	public void initialize(ClienteUpdate ann) {
 	}
+	
+	//Chamada para obter o ID do cliente contido na URI da chamada.
+	@Autowired
+	private HttpServletRequest request;
 	
 	@Autowired
 	private ClienteRepository repo;
 
 	@Override     
-	public boolean isValid(ClienteNewDTO objDto, ConstraintValidatorContext context) { 
-        List<FieldMessage> list = new ArrayList<>();                 
-       
-        if(objDto.getTipoCliente().equals(TipoCliente.PESSOAFISICA.getCod())&& 
-        		!BR.isValidCPF(objDto.getCpfOuCnpj())) {
-        	list.add(new FieldMessage("CpfOuCnpj", "CPF Inválido"));
-        }
+	public boolean isValid(ClienteDTO objDto, ConstraintValidatorContext context) { 
+        List<FieldMessage> list = new ArrayList<>();
         
-        if(objDto.getTipoCliente().equals(TipoCliente.PESSOAJURIDICA.getCod())&& 
-        		!BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
-        	list.add(new FieldMessage("CpfOuCnpj", "CNPJ Inválido"));
-        }
+       //Map criado para obter o valor do ID na URI. É utilizado um map pois recuperamos chave e valor.
+        
+        Map<String,String> map = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        Integer UriId = Integer.parseInt(map.get("id"));
         
         //Validação de e-mail ja existente
         Cliente aux = repo.findByEmail(objDto.getEmail());
         
-        if(aux != null) {
+        if(aux != null && !aux.getId().equals(UriId)) {
         	list.add(new FieldMessage("email", "E-mail já existente"));
         }
         

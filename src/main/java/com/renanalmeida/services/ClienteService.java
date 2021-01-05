@@ -16,6 +16,7 @@ import com.renanalmeida.domain.Cidade;
 import com.renanalmeida.domain.Cliente;
 import com.renanalmeida.domain.Endereco;
 import com.renanalmeida.domain.enums.TipoCliente;
+import com.renanalmeida.dto.ClienteDTO;
 import com.renanalmeida.dto.ClienteNewDTO;
 import com.renanalmeida.repositories.ClienteRepository;
 import com.renanalmeida.repositories.EnderecoRepository;
@@ -68,6 +69,13 @@ public class ClienteService {
 		}
 	}
 	
+	public Cliente update(Cliente obj) {
+		Cliente newObj = find(obj.getId());
+		updateData(newObj,obj); 
+		return repo.save(newObj);
+	}
+	
+	//Usado para insert
 	public Cliente fromDTO (ClienteNewDTO objDTO) {
 		Cliente cli = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), 
 				objDTO.getCpfOuCnpj(), TipoCliente.toEnum(objDTO.getTipoCliente()));
@@ -83,5 +91,15 @@ public class ClienteService {
 			cli.getTelefones().add(objDTO.getTelefone3());
 		}
 		return cli;
+	}
+	//Usado para update
+	public Cliente fromDto(ClienteDTO clienteDTO) {
+		return new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), 
+				null, null);
+	}
+	
+	private void updateData (Cliente newObj, Cliente obj) {
+		newObj.setNome(obj.getNome());
+		newObj.setEmail(obj.getEmail());
 	}
 }
