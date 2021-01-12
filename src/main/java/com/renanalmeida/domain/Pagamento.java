@@ -11,12 +11,15 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.renanalmeida.domain.enums.EstadoPagamento;
 
 @Entity
 //Anotação inheritance mostra que a classe é a classe pai de outras classes. A estratégia é de criar tabela unica
 //Classe abstrata não pode ser instanciada.
 @Inheritance(strategy = InheritanceType.JOINED)
+//Receber a tag type com o preenchimento do valor do tipo de pagamento que foi efetuado.
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;

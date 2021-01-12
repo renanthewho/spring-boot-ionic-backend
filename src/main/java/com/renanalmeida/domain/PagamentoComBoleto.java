@@ -5,9 +5,15 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.renanalmeida.domain.enums.EstadoPagamento;
 
 @Entity
+/*
+ * Conforme o JsonTypeFormat da classe Pagamento, o TypeName serve para indicar como a descricao
+ * vem disposta no JSON.
+ */
+@JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento{
 	private static final long serialVersionUID = 1L;
 	
