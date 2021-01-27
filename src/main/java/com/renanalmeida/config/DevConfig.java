@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.renanalmeida.services.DBService;
+import com.renanalmeida.services.EmailService;
+import com.renanalmeida.services.SmtpEmailService;
 //Classe para fazer a instanciação do banco de dados com os valores dos atributos preenchidos.
 @Configuration
 @Profile("dev")
@@ -29,5 +31,9 @@ public class DevConfig {
 		dbService.instantiateTestDatabase();
 		return true;
 	}
-
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
+	}
 }
