@@ -31,6 +31,9 @@ public class Cliente implements Serializable{
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipoCliente;
+	
+	@JsonIgnore
+	private String senha;
 
 	//Serializa as buscas através do cliente para o Endereço.
 	@OneToMany(mappedBy = "cliente", cascade=CascadeType.ALL)
@@ -53,7 +56,7 @@ public class Cliente implements Serializable{
 	public Cliente () {
 	}
 
-	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente) {
+	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -61,6 +64,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		//Só irá armazenar o código do cliente do Enum.
 		this.tipoCliente =(tipoCliente == null)? null : tipoCliente.getCod();
+		this.senha = senha;
 	}
 
 	public Integer getId() {
@@ -120,6 +124,14 @@ public class Cliente implements Serializable{
 		this.telefones = telefones;
 	}
 	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}
@@ -152,5 +164,4 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
-	
 }

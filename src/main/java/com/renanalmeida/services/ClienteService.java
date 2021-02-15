@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.renanalmeida.domain.Cidade;
@@ -30,11 +31,15 @@ public class ClienteService {
 	// A interface CategoriaRepository é utilizada para, simplesmente, definir o acesso de busca ao banco de dados.
 	
 	private final String DELETE_CLIENTEEXCEPTION = "Existem pedidos atrelados ao cliente";
+	
 	@Autowired
 	private ClienteRepository repo;
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder pe;
 	
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
@@ -78,7 +83,7 @@ public class ClienteService {
 	//Usado para insert
 	public Cliente fromDTO (ClienteNewDTO objDTO) {
 		Cliente cli = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), 
-				objDTO.getCpfOuCnpj(), TipoCliente.toEnum(objDTO.getTipoCliente()));
+				objDTO.getCpfOuCnpj(), TipoCliente.toEnum(objDTO.getTipoCliente()),pe.encode(objDTO.getSenha()));
 		Cidade cid = new Cidade(objDTO.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), 
 				objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cli, cid);
@@ -95,7 +100,7 @@ public class ClienteService {
 	//Usado para update
 	public Cliente fromDto(ClienteDTO clienteDTO) {
 		return new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), 
-				null, null);
+				null, null, null);
 	}
 	
 	private void updateData (Cliente newObj, Cliente obj) {
